@@ -23,7 +23,10 @@ def main():
     parser.add_argument("--count", type=int, default=5)
     parser.add_argument("--interval", type=float, default=1)
     parser.add_argument("--timeout", type=float, default=2)
+    parser.add_argument("--max-failure-percent", type=float, default=0)
     args = parser.parse_args()
+    if not math.isfinite(args.max_failure_percent) or not 0 <= args.max_failure_percent <= 100:
+        parser.error("max-failure-percent must be finite and between 0 and 100")
     if not 1 <= args.count <= 1000:
         parser.error("count must be 1-1000")
     if not math.isfinite(args.interval) or args.interval < 0 or not math.isfinite(args.timeout) or args.timeout <= 0:
@@ -39,7 +42,7 @@ def main():
             time.sleep(args.interval)
     print(json.dumps({"samples": args.count, "successes": successes,
                       "sample_availability_percent": round(successes / args.count * 100, 2)}))
-    return 0 if successes == args.count else 1
+    return 0 if (args.count - successes) / args.count * 100 <= args.max_failure_percent else 1
 
 if __name__ == "__main__":
     raise SystemExit(main())
