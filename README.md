@@ -1,25 +1,20 @@
 # Reliability operations lab
 
-## Purpose
-
-Connect monitoring observations to failure drills, service objectives, and operational documentation.
-
-## Run locally
+Finite synthetic HTTP checks, an explicit acceptance policy, a controlled local
+failure/recovery drill, and runbooks for interpreting observations.
 
 ```sh
+python3 -m unittest -v
 python3 probe.py http://127.0.0.1:8080/healthz --count 5
-# Start the sibling health API first; see RUNBOOK.md for a failure drill.
 ```
 
-## Scope and limitations
+The default requires all samples to succeed. `--max-failure-percent 20` changes
+the drill gate; it is not a rolling production SLO. The automated recovery drill
+uses only its own loopback server and verifies healthy, stopped, and recovered
+states without touching an existing service.
 
-Synthetic samples are not production SLO evidence. Probe only authorized endpoints; OS DNS resolution can exceed the HTTP timeout.
-
-## Engineering notes
-
-See [LEARNING.md](LEARNING.md) for the design decisions, verification evidence,
-and next steps. Never commit credentials, private hostnames, or real incident data.
-
-## Drill acceptance policy
-
-The default requires every observation to succeed. `--max-failure-percent 20` allows at most 20% failed samples before exit 1. This is an explicit drill gate, not a production SLO or rolling error budget.
+See [SLO assumptions](SLO.md), [investigation procedure](RUNBOOK.md), and the blank
+[incident exercise template](INCIDENT-TEMPLATE.md). Actual timestamps and impact
+belong in real exercise notes; sample fixtures are not production incident history.
+For continuous metrics, dashboards, and tested multi-window alerts, use the
+[observability platform](https://github.com/sal-s-root/observability-platform-lab).
