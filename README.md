@@ -18,3 +18,7 @@ See [SLO assumptions](SLO.md), [investigation procedure](RUNBOOK.md), and the bl
 belong in real exercise notes; sample fixtures are not production incident history.
 For continuous metrics, dashboards, and tested multi-window alerts, use the
 [observability platform](https://github.com/sal-s-root/observability-platform-lab).
+
+## Project history
+
+See [history and scope](HISTORY.md) for the correction of earlier synthetic dates.
